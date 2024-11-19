@@ -306,3 +306,78 @@ img {
     font-size: 1.2rem;
     font-weight: 500;
 }
+
+
+@media all and (max-width: 800px) {
+
+    .body-container{
+        margin: 0;
+        height: 100%;
+    }
+
+    .body-container::before {
+        content: none;
+    }
+    
+    .weather-container{
+        margin: 0;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        height: 100%;
+        width: 100%;
+
+        border-radius: 0;
+    }
+
+    .leftside, .rightside{
+        margin: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .forecast-display{
+        height: 100%;
+    }
+
+    .search-bar{
+        display: none;
+    }
+    
+    .leftside {
+        align-items: center;
+        margin-bottom: 3rem;
+    }
+
+    .weather-container {
+        height: 100%;
+        width: 100%;
+
+    }
+
+    .current-weather-container {
+        height: auto;
+    }
+
+    .temp {
+        width: 100%;
+    }
+
+    #temp-wrap {
+        height: 70%;   
+    }
+
+    #temp-wrap h2{
+        font-size: 1rem;
+        height: 80%;
+        width: 20%;
+        text-align: start;
+        text-justify: start;
+    }
+
+    .current-weather {
+        justify-content: center;
+        align-items: center;
+    }
+}

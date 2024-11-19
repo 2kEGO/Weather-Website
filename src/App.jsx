@@ -54,6 +54,10 @@ function App() {
     }
   };
 
+  const handleSearchSuggestions = () => {
+    
+  };
+
     if (!currentWeather || !locations || !forecast) {
       return <div>Loading...</div>; // Prevent accessing null properties
     }
@@ -84,7 +88,6 @@ function App() {
     <div className="body-container">
       
       <div className="weather-container">
-
 
         <div className="leftside">
 
