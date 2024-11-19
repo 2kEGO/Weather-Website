@@ -23,14 +23,23 @@ function App() {
       setCurrentWeather(data.current);
       setLocations(data.location);
       setForecast(data.forecast);
-    } catch (error) {
+    } 
+    catch (error) {
       console.log('error:', error);
     }
+  };
+
+  const fetchSearch = async (location) => {
+
+    fetch(`https://api.weatherapi.com/v1/search.json?key=${apiKey}&q=${location}`)
+      .then(res => res.json())
+      .then(data => console.log(data))
   };
 
   // Fetch data for the default location on component mount
   useEffect(() => {
     fetchData(currentLocation);
+    fetchSearch(currentLocation);
   }, []);
 
   // Handle input changes
@@ -184,7 +193,7 @@ function CurrWeather({time, icon, temp}) {
 
     <h4>{time}</h4>
     <img src={icon} alt="" />
-    <div class='degree'>
+    <div className='degree'>
       <h4>{temp}</h4>
       <h5>°C</h5>
     </div>
