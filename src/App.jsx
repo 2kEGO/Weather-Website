@@ -1,17 +1,31 @@
 import { useState, useEffect } from 'react';
 import { format } from "date-fns";
 import './App.css';
+import './Slide-bar.css';
 
 
-const apiKey = import.meta.env.VITE_URL; // Replace with your actual API key
+const apiKey = import.meta.env.VITE_URL;
 
 
 function App() {
+
+  // Get Api data for current/today temp info
   const [currentWeather, setCurrentWeather] = useState(null);
+
+  // Get Api data for current location info
   const [locations, setLocations] = useState(null);
+
+  // Get Api data for 5 day forecast info
   const [forecast, setForecast] = useState(null);
+  
+  // Default location 
   const [currentLocation, setCurrentLocation] = useState("Toronto");
 
+
+  const [searchLocation, setSearchLocation] = useState("");
+
+
+  // Fetch Current, Forecast and Location data from API url
   const fetchData = async (location) => {
     const dayForecast = 5;
     const apiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}&days=${dayForecast}&aqi=yes&alerts=no`;
@@ -29,6 +43,8 @@ function App() {
     }
   };
 
+
+  // Fetch search suggestions data from API url
   const fetchSearch = async (location) => {
 
     fetch(`https://api.weatherapi.com/v1/search.json?key=${apiKey}&q=${location}`)
@@ -54,25 +70,36 @@ function App() {
     }
   };
 
+  // Handle search suggestions on Enter key (in progress)
   const handleSearchSuggestions = () => {
-    
+    if (currentLocation.trim() !== "") {
+      fetchSearch(currentLocation);
+    }
   };
 
+  // Render data
     if (!currentWeather || !locations || !forecast) {
       return <div>Loading...</div>; // Prevent accessing null properties
     }
 
+  // Get current location today temp
     const todayMinTemp = forecast.forecastday[0].day.mintemp_c;
     const todayMaxTemp = forecast.forecastday[0].day.maxtemp_c;
+
+  // Get current location time
     const localHour = locations.localtime.split(" ")[1];
 
+  // Get current lacation date from location time
     const currentHour = new Date(locations.localtime).getHours();
+
+    // Get hourly(5 hours) forecast for current location
     const hourlyForecast = forecast.forecastday[0].hour.slice(0, 5).map((hour, index) => ({
       time: (currentHour + index) % 24, // Wrap around to 24-hour format
       temp: Math.ceil(hour.temp_c),
       icon: hour.condition.icon,
     }));
 
+    // Get 5 days forecast for current location
     const dailyForecast = forecast.forecastday.map(day => ({
       date: format(new Date(day.date), "EEE"),
       icon: day.day.condition.icon,
@@ -80,26 +107,62 @@ function App() {
       maxTemp: Math.ceil(day.day.maxtemp_c),
     }));
 
+    // Toggle off hamburger menu
+   const ToggleOff = () => {
+    document.getElementById('sideBar').style.display = 'none';
+   }
 
-    
+   // Toggle on hamburger menu
+   const ToggleOn = () => {
+    document.getElementById('sideBar').style.display = 'flex';
+   }
+
+  
 
 
   return (
     <div className="body-container">
       
-      <div className="weather-container">
+      <div className="weather-container">        
 
-        <div className="leftside">
+        <div className="hamburger" onClick={ToggleOn}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
 
-          <div className="search-bar">
+        <div className="side-bar-items" id='sideBar'>
+
+          <div className="x-span-container" onClick={ToggleOff}>
+            <div className="x-span">
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+
+          <div className="search-bar" >
             <input type="text"
-                   placeholder='City' 
-                   value={currentLocation}
+                  placeholder='City' 
+                  value={currentLocation}
                   onChange={handleInputChange}
                   onKeyDown={(event) => {
                     if (event.key === "Enter") handleSearch();
                   }}/>
           </div>
+
+          {/* <div className='suggestion'>
+
+            <ul>
+              <li></li>
+            </ul>
+          </div> */}
+
+          
+
+        </div>
+
+        <div className="leftside">
+
 
           <div className="current-weather">
 
@@ -184,11 +247,9 @@ function App() {
       
     </div>
   );
-
-  
-
   
 }
+
 
 
 function CurrWeather({time, icon, temp}) {

@@ -1,0 +1,134 @@
+
+
+.hamburger {
+    width: 50px;
+    height: 40px;
+
+    border: 0;
+    border-radius: 5px;
+
+    position: absolute;
+    top: 10px;
+    left: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+
+    cursor: pointer;
+}
+
+.hamburger:hover {
+    background-color: hsl(0, 12%, 89%);
+}
+
+.hamburger span {
+
+    width: 90%;
+    height: 5px;
+
+    border-radius: 15px;
+
+    background-color: white;
+
+}
+
+.side-bar-items {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    height: 100%;
+    width: 18%;
+
+    background-image: linear-gradient(to right top, #051937, #072149, #0e285c, #182f6e, #253681);
+
+    display: none;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    border-radius: 10px;
+    
+    overflow: hidden;
+
+
+}
+
+.search-bar {
+    width: 80%;
+    /* height: 3vh; */
+}
+
+.search-bar input {
+    width: 100%;
+    height: 100%;
+
+    /* border-radius: 50px; */
+    border: 0;
+    padding: 10px;
+
+    text-justify: end;
+    font-size: 1.5rem;
+    color: white;
+
+
+    background-color: transparent;
+    border-bottom: 1px solid white;
+}
+
+.search-bar input::placeholder{
+    color: white;
+}
+
+.search-bar input:focus{
+    border: 0;
+}
+
+.x-span-container {
+    width: 100%;
+
+    display: flex;
+    justify-content: flex-end;
+
+    margin-bottom: 2rem;
+
+}
+
+.x-span {
+    height: 50px;
+    width: 50px;
+
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    position: relative;
+
+    margin: 10px;
+}
+
+.x-span:hover {
+    background-color: hsla(0, 16%, 91%, 0.808);
+}
+
+.x-span span{
+    width: 100%;
+    height: 5%;
+
+    background-color: white;
+    transform-origin: center center;
+    position: absolute;    
+}
+
+.x-span span:first-child {
+    transform: rotate(45deg);
+    
+}
+.x-span span:last-child {
+    transform: rotate(-45deg);
+}
+
