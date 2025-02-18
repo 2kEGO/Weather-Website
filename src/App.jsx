@@ -6,7 +6,7 @@ import GetUserLocation from '../utils/GetUserLocation';
 
 
 const apiKey = import.meta.env.VITE_URL;
-
+const locationApi = import.meta.env.VITE_GET_LOCATION;
 
 function App() {
 
@@ -20,21 +20,59 @@ function App() {
   const [forecast, setForecast] = useState(null);
   
   // Default location 
-  const [currentLocation, setCurrentLocation] = useState("Toronto");
+  const [currentLocation, setCurrentLocation] = useState("");
 
-
-  const [searchLocation, setSearchLocation] = useState("");
-
+  //User input city 
+  const [legitCheck, setLegitCheck] = useState(false)
   
+
+  //Fetch latitude, and longitude data from API url
+  const GetUserLocation = () => {
+
+    const success = async (position) => {
+
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        const geoApi = `https://api-bdc.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en&key=${locationApi}`;
+        
+        try {
+            const res = await fetch(geoApi);
+            const data = await res.json();
+            console.log(data.locality);
+            const result = data.locality;
+            setCurrentLocation(result)
+            fetchData(result)
+
+        } catch (error) {
+            console.error(error);
+        }
+
+
+    }
+
+    const error = () => {
+        console.log('Error occurred while fetching location');
+    }
+
+    navigator.geolocation.getCurrentPosition(success, error);
+  }
+
+  useEffect(() => {
+    GetUserLocation();
+  },[])
 
   // Fetch Current, Forecast and Location data from API url
   const fetchData = async (location) => {
+    if(!location) return;
+
     const dayForecast = 5;
     const apiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}&days=${dayForecast}&aqi=yes&alerts=no`;
 
     try {
       const result = await fetch(apiUrl);
       const data = await result.json(); // Await JSON parsing
+      
       setCurrentWeather(data.current);
       setLocations(data.location);
       setForecast(data.forecast);
@@ -45,19 +83,11 @@ function App() {
   };
 
 
-  // Fetch search suggestions data from API url
-  const fetchSearch = async (location) => {
-
-    fetch(`https://api.weatherapi.com/v1/search.json?key=${apiKey}&q=${location}`)
-      .then(res => res.json())
-      .then(data => data.json())
-  };
-
-
-  // Fetch data for the default location on component mount
+  // Fetch weather data whenever `currentLocation` changes
   useEffect(() => {
-    fetchData(currentLocation);
-    fetchSearch(currentLocation);
+    if (currentLocation) {
+      fetchData(currentLocation);
+    }
   }, []);
 
   // Handle input changes
@@ -65,19 +95,34 @@ function App() {
     setCurrentLocation(event.target.value);
   };
 
-  // Handle search on Enter key or button click
-  const handleSearch = () => {
-    if (currentLocation.trim() !== "") {
-      fetchData(currentLocation);
+  // Handle search on Enter key
+  const handleSearch = async () => {
+    const location = currentLocation.trim();
+
+    // Check if location is not empty
+    if (location === "") {
+      setLegitCheck(true);
+    }
+
+    // Check if location is valid
+    try {
+      const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=no`);
+      const data = await response.json();
+
+      if (data.error) {
+        setLegitCheck(true);
+        return;
+      }
+      else{
+        fetchData(location)
+        setCurrentLocation("")
+      }
+    }
+    catch(err){
+      console.error(err);
     }
   };
 
-  // Handle search suggestions on Enter key (in progress)
-  const handleSearchSuggestions = () => {
-    if (currentLocation.trim() !== "") {
-      fetchSearch(currentLocation);
-    }
-  };
 
   // Render data
     if (!currentWeather || !locations || !forecast) {
@@ -120,8 +165,6 @@ function App() {
    }
 
   
-
-
   return (
     <div className="body-container">
       
@@ -143,18 +186,24 @@ function App() {
           </div>
 
           <div className="search-bar" >
-            <input type="text"
+            <input 
+                  type="text"
                   placeholder='City' 
                   value={currentLocation}
                   onChange={handleInputChange}
                   onKeyDown={(event) => {
                     if (event.key === "Enter") handleSearch();
-                  }}/>
+                  }}
+                  
+            />
+              
           </div>
 
-          <div className="search-bar">
+          <h4 className={legitCheck? 'show': 'hidden'}>Wrong input</h4>
+
+          {/* <div className="search-bar">
             <button onClick={GetUserLocation}></button>
-          </div>
+          </div> */}
 
           {/* <div className='suggestion'>
 

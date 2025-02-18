@@ -4,6 +4,15 @@
 
 }
 
+.hidden {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+
 body {
 
     color: hsl(0, 100%, 97%);
@@ -354,3 +363,4 @@ img {
         align-items: center;
     }
 }
+
