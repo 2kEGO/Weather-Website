@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { format } from "date-fns";
 import './App.css';
 import './Slide-bar.css';
+import GetUserLocation from '../utils/GetUserLocation';
 
 
 const apiKey = import.meta.env.VITE_URL;
@@ -24,6 +25,7 @@ function App() {
 
   const [searchLocation, setSearchLocation] = useState("");
 
+  
 
   // Fetch Current, Forecast and Location data from API url
   const fetchData = async (location) => {
@@ -33,7 +35,6 @@ function App() {
     try {
       const result = await fetch(apiUrl);
       const data = await result.json(); // Await JSON parsing
-      console.log(data);
       setCurrentWeather(data.current);
       setLocations(data.location);
       setForecast(data.forecast);
@@ -49,8 +50,9 @@ function App() {
 
     fetch(`https://api.weatherapi.com/v1/search.json?key=${apiKey}&q=${location}`)
       .then(res => res.json())
-      .then(data => console.log(data))
+      .then(data => data.json())
   };
+
 
   // Fetch data for the default location on component mount
   useEffect(() => {
@@ -150,6 +152,10 @@ function App() {
                   }}/>
           </div>
 
+          <div className="search-bar">
+            <button onClick={GetUserLocation}></button>
+          </div>
+
           {/* <div className='suggestion'>
 
             <ul>
@@ -221,7 +227,7 @@ function App() {
           </div>
 
           <div className='forecast-display'>
-              <h3 id='title'>5-Day Forecast</h3>
+              <h3 id='title'>Forecast</h3>
 
               <hr />
 
