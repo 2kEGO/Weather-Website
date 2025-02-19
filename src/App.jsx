@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { format } from "date-fns";
 import './App.css';
 import './Slide-bar.css';
-import GetUserLocation from '../utils/GetUserLocation';
+
 
 
 const apiKey = import.meta.env.VITE_URL;
