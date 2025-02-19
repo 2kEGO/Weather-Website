@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { format } from "date-fns";
 import './App.css';
 import './Slide-bar.css';
+import backgroundImage from "./assets/bg.avif";
 
 
 
@@ -166,7 +167,7 @@ function App() {
 
   
   return (
-    <div className="body-container">
+    <div className="body-container" src='' >
       
       <div className="weather-container">        
 
