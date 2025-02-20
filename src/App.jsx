@@ -3,6 +3,8 @@ import { format } from "date-fns";
 import './App.css';
 import './Slide-bar.css';
 import backgroundImage from "./assets/bg.avif";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
 
 
 
@@ -117,6 +119,7 @@ function App() {
       else{
         fetchData(location)
         setCurrentLocation("")
+        setLegitCheck(false);
       }
     }
     catch(err){
@@ -177,17 +180,17 @@ function App() {
           <span></span>
         </div>
 
-        <div className="side-bar-items" id='sideBar'>
+        <div className="side-bar-container" id='sideBar'>
 
-          <div className="x-span-container" onClick={ToggleOff}>
-            <div className="x-span">
+          <div className="side-bar-item" id='x-span-container' >
+            <button className="x-span" onClick={ToggleOff}>
               <span></span>
               <span></span>
-            </div>
+            </button>
           </div>
 
-          <div className="search-bar" >
-            <input 
+          <div className="side-bar-item" >
+            <input className='search-bar-input'
                   type="text"
                   placeholder='City' 
                   value={currentLocation}
@@ -195,24 +198,20 @@ function App() {
                   onKeyDown={(event) => {
                     if (event.key === "Enter") handleSearch();
                   }}
-                  
+                                   
             />
               
           </div>
 
-          <h4 className={legitCheck? 'show': 'hidden'}>Wrong input</h4>
+          <div className="side-bar-item" id='wrong-input'>
+            <p className={legitCheck? 'show': 'hidden'}>Wrong input</p>
+          </div>
 
-          {/* <div className="search-bar">
-            <button onClick={GetUserLocation}></button>
-          </div> */}
-
-          {/* <div className='suggestion'>
-
-            <ul>
-              <li></li>
-            </ul>
-          </div> */}
-
+          <div className="side-bar-item">
+            <button id='side-bar-button' onClick={handleSearch}>
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+            </button>
+          </div>
           
 
         </div>
