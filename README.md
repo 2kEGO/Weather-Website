@@ -12,8 +12,4 @@
 ✅ Search for weather in any city  
 ✅ Displays temperature, humidity, and weather conditions  
 ✅ User-friendly interface  
-
-## 📦 Technologies Used  
-- React.js ⚛️  
-- OpenWeather API 🌎  
-- CSS for styling 🎨  
+ 
